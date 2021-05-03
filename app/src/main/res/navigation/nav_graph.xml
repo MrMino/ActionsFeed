@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/ActionListFragment">
+
+    <action
+        android:id="@+id/action_global_SettingsFragment"
+        app:destination="@id/SettingsFragment" />
+
+    <fragment
+        android:id="@+id/ActionListFragment"
+        android:name="pl.edu.pwr.student.actions_feed.ActionListFragment"
+        android:label="@string/action_list_fragment_label"
+        tools:layout="@layout/fragment_action_list">
+
+        <action
+            android:id="@+id/action_ActionListFragment_to_ActionDetailsFragment"
+            app:destination="@id/ActionDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ActionDetailsFragment"
+        android:name="pl.edu.pwr.student.actions_feed.ActionDetailsFragment"
+        android:label="@string/action_details_fragment_label"
+        tools:layout="@layout/fragment_action_details">
+
+        <action
+            android:id="@+id/action_ActionDetailsFragment_to_ActionListFragment"
+            app:destination="@id/ActionListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/SettingsFragment"
+        android:name="pl.edu.pwr.student.actions_feed.SettingsFragment"
+        android:label="Settings Fragment">
+
+    </fragment>
+</navigation>
