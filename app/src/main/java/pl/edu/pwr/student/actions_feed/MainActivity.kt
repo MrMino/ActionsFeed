@@ -10,10 +10,20 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import pl.edu.pwr.student.actions_feed.databinding.ActivityMainBinding
+import java.time.Duration
+import java.time.Instant
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
-
+    private val actionsViewModel: ActionsViewModel by viewModels()
+    private val waitTime: Duration = Duration.ofSeconds(15)
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
@@ -32,6 +42,26 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+        }
+
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                while (true) {
+                    val start = Instant.now()
+                    runBackgroundRefresh()
+                    val end = Instant.now()
+                    val delta = Duration.between(end, start)
+                    delay((waitTime - delta).toMillis())
+                }
+            }
+        }
+    }
+
+    private suspend fun runBackgroundRefresh() {
+        Log.d(null, "Query gh")
+
+        withContext(Dispatchers.Main) {
+            actionsViewModel.actionData.value = mutableListOf() // TODO: Replace me
         }
     }
 
