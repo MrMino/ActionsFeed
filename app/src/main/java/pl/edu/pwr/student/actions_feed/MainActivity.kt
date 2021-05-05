@@ -1,31 +1,44 @@
 package pl.edu.pwr.student.actions_feed
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import com.google.android.material.snackbar.Snackbar
+import android.view.Menu
+import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
-import androidx.activity.viewModels
-import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceManager
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import com.google.android.material.snackbar.Snackbar
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pl.edu.pwr.student.actions_feed.databinding.ActivityMainBinding
+import pl.edu.pwr.student.actions_feed.dto.GithubListWorkflows
 import java.time.Duration
 import java.time.Instant
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private val actionsViewModel: ActionsViewModel by viewModels()
-    private val waitTime: Duration = Duration.ofSeconds(15)
+    private val waitTime: Duration = Duration.ofSeconds(15) // TODO: Move this to settings
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var requestQueue: RequestQueue
+    private lateinit var preferenceManager: SharedPreferences
+    private val gson: Gson =
+        GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +51,9 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        requestQueue = Volley.newRequestQueue(this)
+        preferenceManager = PreferenceManager.getDefaultSharedPreferences(this)
 
         binding.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -58,11 +74,32 @@ class MainActivity : AppCompatActivity() {
     }
 
     private suspend fun runBackgroundRefresh() {
-        Log.d(null, "Query gh")
+        val repoPath = preferenceManager.getString("repository", null) ?: return // TODO: Avoid requiring user to restart app when setting preferences
 
-        withContext(Dispatchers.Main) {
-            actionsViewModel.actionData.value = mutableListOf() // TODO: Replace me
+        val rq = object : StringRequest(
+            Method.GET,
+            "https://api.github.com/repos/$repoPath/actions/runs",
+            {
+                lifecycleScope.launch {
+                    withContext(Dispatchers.Main) {
+                        val obj = gson.fromJson(it, GithubListWorkflows::class.java)
+                        actionsViewModel.actionData.value = obj.workflowRuns
+                    }
+                }
+            },
+            null
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val token = preferenceManager.getString("token", null)
+                val headers = HashMap<String, String>()
+                if (token != null) {
+                    headers.put("Authorization", "token $token")
+                }
+                return headers
+            }
         }
+
+        requestQueue.add(rq)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -2,10 +2,10 @@ package pl.edu.pwr.student.actions_feed
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import pl.edu.pwr.student.actions_feed.databinding.FragmentActionListBinding
