@@ -82,6 +82,7 @@ class MainActivity : AppCompatActivity() {
             {
                 lifecycleScope.launch {
                     withContext(Dispatchers.Main) {
+                        Log.d(null, it)
                         val obj = gson.fromJson(it, GithubListWorkflows::class.java)
                         actionsViewModel.actionData.value = obj.workflowRuns
                     }

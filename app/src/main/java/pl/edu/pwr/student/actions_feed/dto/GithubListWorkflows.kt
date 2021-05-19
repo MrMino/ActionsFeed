@@ -6,9 +6,11 @@ data class GithubListWorkflows(
 ) {
     data class WorkflowItem(
         val id: Int,
+        val name: String,
         val workflowId: Int,
         val status: String,
         val conclusion: String,
         val headSha: String,
+        val runNumber: Int,
     )
 }
