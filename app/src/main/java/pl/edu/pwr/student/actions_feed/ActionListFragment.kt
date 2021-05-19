@@ -27,18 +27,15 @@ class ActionListFragment : Fragment() {
 
         actionsViewModel.actionData.observe(viewLifecycleOwner, {
             actionsList.clear()
-            actionsList.addAll(it.groupBy { workflowItem -> workflowItem.workflowId }.values.map { vec -> vec.maxByOrNull { item -> item.runNumber }!! }.sortedBy { workflowItem -> workflowItem.status }.map { workflowItem -> "$workflowItem" })
+            actionsList.addAll(
+                it.groupBy { workflowItem -> workflowItem.workflowId }.values.map { vec -> vec.maxByOrNull { item -> item.runNumber }!! }
+                    .sortedBy { workflowItem -> workflowItem.status }
+                    .map { workflowItem -> "$workflowItem" }
+            )
             actionListAdapter.notifyDataSetChanged()
         })
 
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-//        binding.buttonFirst.setOnClickListener {
-//            findNavController().navigate(R.id.action_ActionListFragment_to_ActionDetailsFragment)
-//        }
-    }
 }

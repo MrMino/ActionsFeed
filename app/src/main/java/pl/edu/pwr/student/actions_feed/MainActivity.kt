@@ -74,7 +74,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private suspend fun runBackgroundRefresh() {
-        val repoPath = preferenceManager.getString("repository", null) ?: return // TODO: Avoid requiring user to restart app when setting preferences
+        val repoPath = preferenceManager.getString("repository", null)
+            ?: return // TODO: Avoid requiring user to restart app when setting preferences
 
         val rq = object : StringRequest(
             Method.GET,

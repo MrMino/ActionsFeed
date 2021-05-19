@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ActionListAdapter(private val actionsList: MutableList<String>) :
     RecyclerView.Adapter<ActionListAdapter.ViewHolder>() {
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textView: TextView = view.findViewById(R.id.textView)
     }
 
