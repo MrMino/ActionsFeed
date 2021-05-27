@@ -11,17 +11,21 @@
 
     <fragment
         android:id="@+id/ActionListFragment"
-        android:name="pl.edu.pwr.student.actions_feed.ActionListFragment"
+        android:name="pl.edu.pwr.student.actions_feed.ui.action_list.ActionListFragment"
         android:label="@string/action_list_fragment_label"
         tools:layout="@layout/fragment_action_list">
 
         <action
             android:id="@+id/action_ActionListFragment_to_ActionDetailsFragment"
             app:destination="@id/ActionDetailsFragment" />
+
+        <action
+            android:id="@+id/action_ActionListFragment_to_ActionRepositorySelectionFragment"
+            app:destination="@id/ActionRepositorySelectionFragment" />
     </fragment>
     <fragment
         android:id="@+id/ActionDetailsFragment"
-        android:name="pl.edu.pwr.student.actions_feed.ActionDetailsFragment"
+        android:name="pl.edu.pwr.student.actions_feed.ui.action_details.ActionDetailsFragment"
         android:label="@string/action_details_fragment_label"
         tools:layout="@layout/fragment_action_details">
 
@@ -31,8 +35,19 @@
     </fragment>
 
     <fragment
+        android:id="@+id/ActionRepositorySelectionFragment"
+        android:name="pl.edu.pwr.student.actions_feed.ui.repository_selection.RepositorySelectionFragment"
+        android:label="@string/action_repository_selection_fragment_label"
+        tools:layout="@layout/fragment_repository_selection">
+
+        <action
+            android:id="@+id/action_ActionRepositorySelectionFragment_to_ActionListFragment"
+            app:destination="@id/ActionListFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/SettingsFragment"
-        android:name="pl.edu.pwr.student.actions_feed.SettingsFragment"
+        android:name="pl.edu.pwr.student.actions_feed.ui.settings.SettingsFragment"
         android:label="Settings Fragment">
 
     </fragment>

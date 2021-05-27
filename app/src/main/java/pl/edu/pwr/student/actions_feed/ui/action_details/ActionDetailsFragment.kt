@@ -1,4 +1,4 @@
-package pl.edu.pwr.student.actions_feed
+package pl.edu.pwr.student.actions_feed.ui.action_details
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import pl.edu.pwr.student.actions_feed.R
 import pl.edu.pwr.student.actions_feed.databinding.FragmentActionDetailsBinding
 
 /**

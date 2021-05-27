@@ -1,4 +1,4 @@
-package pl.edu.pwr.student.actions_feed
+package pl.edu.pwr.student.actions_feed.ui.action_list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import pl.edu.pwr.student.actions_feed.ActionsViewModel
 import pl.edu.pwr.student.actions_feed.databinding.FragmentActionListBinding
 
 class ActionListFragment : Fragment() {

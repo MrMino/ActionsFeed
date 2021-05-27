@@ -1,10 +1,11 @@
-package pl.edu.pwr.student.actions_feed
+package pl.edu.pwr.student.actions_feed.ui.action_list
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import pl.edu.pwr.student.actions_feed.R
 
 class ActionListAdapter(private val actionsList: MutableList<String>) :
     RecyclerView.Adapter<ActionListAdapter.ViewHolder>() {

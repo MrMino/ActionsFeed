@@ -16,7 +16,6 @@ import androidx.preference.PreferenceManager
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.google.android.material.snackbar.Snackbar
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -55,9 +54,9 @@ class MainActivity : AppCompatActivity() {
         requestQueue = Volley.newRequestQueue(this)
         preferenceManager = PreferenceManager.getDefaultSharedPreferences(this)
 
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        binding.fab.setOnClickListener { _ ->
+            val nav = findNavController(R.id.nav_host_fragment_content_main)
+            nav.navigate(R.id.action_ActionListFragment_to_ActionRepositorySelectionFragment)
         }
 
         lifecycleScope.launch {
