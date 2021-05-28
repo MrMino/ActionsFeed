@@ -55,11 +55,6 @@ class MainActivity : AppCompatActivity() {
         requestQueue = Volley.newRequestQueue(this)
         preferenceManager = PreferenceManager.getDefaultSharedPreferences(this)
 
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
-
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 while (true) {

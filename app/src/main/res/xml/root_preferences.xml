@@ -13,5 +13,12 @@
             app:title="Repository (format @owner/@repo)" />
 
     </PreferenceCategory>
+    <PreferenceCategory android:title="Look and feel">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="switch_preference_dark_theme"
+            android:title="Dark theme" />
+    </PreferenceCategory>
 
 </PreferenceScreen>
