@@ -9,12 +9,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import pl.edu.pwr.student.actions_feed.ActionsViewModel
 import pl.edu.pwr.student.actions_feed.databinding.FragmentActionListBinding
+import pl.edu.pwr.student.actions_feed.dto.GithubListWorkflows
 
 class ActionListFragment : Fragment() {
     private lateinit var actionListAdapter: ActionListAdapter
     private lateinit var binding: FragmentActionListBinding
     private val actionsViewModel: ActionsViewModel by activityViewModels()
-    private val actionsList: MutableList<String> = mutableListOf()
+    private val actionsList: MutableList<GithubListWorkflows.WorkflowItem> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,9 +30,9 @@ class ActionListFragment : Fragment() {
         actionsViewModel.actionData.observe(viewLifecycleOwner, {
             actionsList.clear()
             actionsList.addAll(
-                it.groupBy { workflowItem -> workflowItem.workflowId }.values.map { vec -> vec.maxByOrNull { item -> item.runNumber }!! }
+                it.groupBy { workflowItem -> workflowItem.workflowId }
+                    .values.map { vec -> vec.maxByOrNull { item -> item.runNumber }!! }
                     .sortedBy { workflowItem -> workflowItem.status }
-                    .map { workflowItem -> "$workflowItem" }
             )
             actionListAdapter.notifyDataSetChanged()
         })
