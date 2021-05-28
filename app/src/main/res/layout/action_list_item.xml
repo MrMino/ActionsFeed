@@ -58,6 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
+            android:maxLength="8"
             android:text="12345678901234567890123456789012" />
 
     </LinearLayout>
