@@ -1,5 +1,7 @@
 package pl.edu.pwr.student.actions_feed.ui.repository_selection
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -32,6 +34,8 @@ class RepositorySelectionFragment : Fragment() {
         binding.recyclerView.adapter = repositoryListAdapter
 
         binding.addRepo.setOnClickListener { _ -> addRepository(binding.repositoryPath.text.toString()) }
+        //Ugly for now
+        binding.deleteRepo.setOnClickListener { _ -> deleteRepository(binding.repositoryPath.text.toString()) }
 
         initializeRecyclerView()
 
@@ -47,10 +51,37 @@ class RepositorySelectionFragment : Fragment() {
     }
 
     private fun addRepository(repoPath: String) {
-        repositoryList.add(repoPath)
-        repositoryListAdapter.notifyItemInserted(repositoryList.size - 1)
-        lifecycleScope.launch(Dispatchers.IO) {
-            database.repositoryDao().addRepository(Repository(0, repoPath))
+        //First check if is already in list
+        if(!repositoryList.contains(repoPath)) {
+            repositoryList.add(repoPath)
+            repositoryListAdapter.notifyItemInserted(repositoryList.size - 1)
+            lifecycleScope.launch(Dispatchers.IO) {
+                database.repositoryDao().addRepository(Repository(0, repoPath))
+            }
+        }
+        else {
+            val builder = AlertDialog.Builder(this.context)
+            builder.setTitle("Duplication")
+            builder.setMessage("You are already watching this repo")
+            builder.setPositiveButton("OK") { _: DialogInterface, _: Int -> }
+            builder.show()
+        }
+    }
+
+    //Ugly for now
+    private fun deleteRepository(repoPath: String) {
+        if(repositoryList.contains(repoPath)) {
+            lifecycleScope.launch(Dispatchers.IO) {
+                database.repositoryDao().deleteRepositoryByName(repoPath)
+            }
+            repositoryListAdapter.deleteItem(repoPath)
+        }
+        else {
+            val builder = AlertDialog.Builder(this.context)
+            builder.setTitle("Lack of repo")
+            builder.setMessage("You are not watching that repo yet")
+            builder.setPositiveButton("OK") { _: DialogInterface, _: Int -> }
+            builder.show()
         }
     }
 }

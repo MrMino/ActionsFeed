@@ -26,13 +26,20 @@
             android:ems="10"
             android:inputType="textPersonName"
             android:minHeight="48dp"
-            android:text="Name" />
+            android:hint="Name" />
 
         <Button
             android:id="@+id/addRepo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="+"
+            android:textSize="24sp" />
+
+        <Button
+            android:id="@+id/deleteRepo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-"
             android:textSize="24sp" />
 
     </LinearLayout>
