@@ -54,11 +54,6 @@ class MainActivity : AppCompatActivity() {
         requestQueue = Volley.newRequestQueue(this)
         preferenceManager = PreferenceManager.getDefaultSharedPreferences(this)
 
-        binding.fab.setOnClickListener { _ ->
-            val nav = findNavController(R.id.nav_host_fragment_content_main)
-            nav.navigate(R.id.action_ActionListFragment_to_ActionRepositorySelectionFragment)
-        }
-
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 while (true) {
@@ -113,6 +108,11 @@ class MainActivity : AppCompatActivity() {
             R.id.action_settings -> {
                 val navController = findNavController(R.id.nav_host_fragment_content_main)
                 navController.navigate(R.id.action_global_SettingsFragment)
+                true
+            }
+            R.id.action_select_repositories -> {
+                val navController = findNavController(R.id.nav_host_fragment_content_main)
+                navController.navigate(R.id.action_global_RepositorySelectionFragment)
                 true
             }
             else -> super.onOptionsItemSelected(item)
