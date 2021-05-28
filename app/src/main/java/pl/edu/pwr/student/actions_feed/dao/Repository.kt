@@ -13,8 +13,13 @@ data class Repository(
 interface RepositoryDao {
     @Insert
     fun addRepository(repository: Repository)
+
     @Query("delete from repository where id = :id")
     fun deleteRepository(id: Long)
+
+    @Query("delete from repository where path = :path")
+    fun deleteRepositoryByName(path: String)
+
     @Query("select path from repository order by id asc")
     fun getAll(): Array<String>
 }
