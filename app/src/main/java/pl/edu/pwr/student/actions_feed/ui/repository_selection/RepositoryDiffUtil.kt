@@ -2,8 +2,10 @@ package pl.edu.pwr.student.actions_feed.ui.repository_selection
 
 import androidx.recyclerview.widget.DiffUtil
 
-class RepositoryDiffUtil(private val oldList:MutableList<String>,
-                     private val newList:MutableList<String>) : DiffUtil.Callback() {
+class RepositoryDiffUtil(
+    private val oldList: MutableList<String>,
+    private val newList: MutableList<String>
+) : DiffUtil.Callback() {
 
     override fun getOldListSize(): Int {
         return oldList.size

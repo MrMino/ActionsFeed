@@ -20,7 +20,8 @@ class RepositorySelectionListAdapter(private val repositoryList: MutableList<Str
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.repository_selection_list_item, parent, false)
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.repository_selection_list_item, parent, false)
         )
     }
 
@@ -45,8 +46,8 @@ class RepositorySelectionListAdapter(private val repositoryList: MutableList<Str
 
     fun deleteItem(path: String) {
         val tmpList: MutableList<String> = mutableListOf()
-        for(i in 0 until repositoryList.size)
-            if(repositoryList[i] != path)
+        for (i in 0 until repositoryList.size)
+            if (repositoryList[i] != path)
                 tmpList.add(repositoryList[i])
         val diffUtilCallback = RepositoryDiffUtil(repositoryList, tmpList)
         val diffResult = DiffUtil.calculateDiff(diffUtilCallback)

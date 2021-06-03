@@ -3,14 +3,17 @@ package pl.edu.pwr.student.actions_feed.ui.repository_selection
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.room.Room
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import pl.edu.pwr.student.actions_feed.dao.Repository
 import pl.edu.pwr.student.actions_feed.dao.RepositoryDatabase
 import pl.edu.pwr.student.actions_feed.databinding.FragmentRepositorySelectionBinding
@@ -28,7 +31,9 @@ class RepositorySelectionFragment : Fragment() {
     ): View? {
         binding = FragmentRepositorySelectionBinding.inflate(layoutInflater, container, false)
 
-        database = Room.databaseBuilder(requireContext(), RepositoryDatabase::class.java, "repository.db").build()
+        database =
+            Room.databaseBuilder(requireContext(), RepositoryDatabase::class.java, "repository.db")
+                .build()
 
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         repositoryListAdapter = RepositorySelectionListAdapter(repositoryList)
@@ -53,20 +58,20 @@ class RepositorySelectionFragment : Fragment() {
 
     private fun addRepository(repoPath: String) {
         //First check if is already in list
-        if(!repositoryList.contains(repoPath)) {
+        if (!repositoryList.contains(repoPath)) {
             checkExistence(repoPath)
         } else {
             showDialogWindow("Duplication", "You are already watching this repo")
         }
     }
 
-    private fun checkExistence(repoPath : String) = runBlocking {
+    private fun checkExistence(repoPath: String) = runBlocking {
         var flag = true
         val job = CoroutineScope(Dispatchers.IO).launch {
             val url = URL("https://github.com/$repoPath")
             val connection = url.openConnection() as HttpsURLConnection
             try {
-                if(connection.responseCode == HttpsURLConnection.HTTP_NOT_FOUND)
+                if (connection.responseCode == HttpsURLConnection.HTTP_NOT_FOUND)
                     flag = false
             } finally {
                 connection.disconnect()
@@ -87,13 +92,12 @@ class RepositorySelectionFragment : Fragment() {
 
     //Ugly for now
     private fun deleteRepository(repoPath: String) {
-        if(repositoryList.contains(repoPath)) {
+        if (repositoryList.contains(repoPath)) {
             lifecycleScope.launch(Dispatchers.IO) {
                 database.repositoryDao().deleteRepositoryByName(repoPath)
             }
             repositoryListAdapter.deleteItem(repoPath)
-        }
-        else {
+        } else {
             showDialogWindow("Lack of repo", "You are not watching that repo yet")
         }
     }
