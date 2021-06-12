@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity(), Callback<GithubListWorkflows> {
                 while (true) {
                     val start = Instant.now()
                     val token = preferenceManager.getString("token", null)
-                    val waitTime = Duration.ofSeconds(preferenceManager.getInt("waitTime", 15).toLong())
+                    val waitTime = Duration.ofSeconds(preferenceManager.getString("waitTime", "15")!!.toLong())
                     if (token != null) {
                         runBackgroundRefresh(ghAPI, token)
                     }
