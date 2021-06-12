@@ -9,8 +9,8 @@
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
-            app:key="repository"
-            app:title="Repository (format @owner/@repo)" />
+            app:key="waitTime"
+            app:title="Github API call request interval" />
 
     </PreferenceCategory>
 

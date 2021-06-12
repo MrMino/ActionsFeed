@@ -29,11 +29,13 @@ class ActionListFragment : Fragment() {
 
         actionsViewModel.actionData.observe(viewLifecycleOwner, {
             actionsList.clear()
-            actionsList.addAll(
-                it.groupBy { workflowItem -> workflowItem.workflowId }
-                    .values.map { vec -> vec.maxByOrNull { item -> item.runNumber }!! }
-                    .sortedBy { workflowItem -> workflowItem.status }
-            )
+            for (item in it.values) {
+                actionsList.addAll(
+                    item.groupBy { workflowItem -> workflowItem.workflowId }
+                        .values.map { vec -> vec.maxByOrNull { item -> item.runNumber }!! }
+                        .sortedBy { workflowItem -> workflowItem.status }
+                )
+            }
             actionListAdapter.notifyDataSetChanged()
         })
 

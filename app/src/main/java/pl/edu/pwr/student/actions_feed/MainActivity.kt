@@ -13,6 +13,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.preference.PreferenceManager
+import androidx.room.Room
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 import com.google.gson.FieldNamingPolicy
@@ -23,6 +24,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pl.edu.pwr.student.actions_feed.api.GitHubService
+import pl.edu.pwr.student.actions_feed.dao.RepositoryDatabase
 import pl.edu.pwr.student.actions_feed.databinding.ActivityMainBinding
 import pl.edu.pwr.student.actions_feed.dto.GithubListWorkflows
 import retrofit2.Call
@@ -35,11 +37,11 @@ import java.time.Instant
 
 class MainActivity : AppCompatActivity(), Callback<GithubListWorkflows> {
     private val actionsViewModel: ActionsViewModel by viewModels()
-    private val waitTime: Duration = Duration.ofSeconds(15) // TODO: Move this to settings
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var requestQueue: RequestQueue
     private lateinit var preferenceManager: SharedPreferences
+    private lateinit var repositoryDatabase: RepositoryDatabase
     private val gson: Gson =
         GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
 
@@ -57,6 +59,8 @@ class MainActivity : AppCompatActivity(), Callback<GithubListWorkflows> {
 
         requestQueue = Volley.newRequestQueue(this)
         preferenceManager = PreferenceManager.getDefaultSharedPreferences(this)
+        repositoryDatabase = Room.databaseBuilder(applicationContext, RepositoryDatabase::class.java, "repository.db")
+            .build()
 
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
@@ -66,7 +70,11 @@ class MainActivity : AppCompatActivity(), Callback<GithubListWorkflows> {
 
                 while (true) {
                     val start = Instant.now()
-                    runBackgroundRefresh(ghAPI)
+                    val token = preferenceManager.getString("token", null)
+                    val waitTime = Duration.ofSeconds(preferenceManager.getInt("waitTime", 15).toLong())
+                    if (token != null) {
+                        runBackgroundRefresh(ghAPI, token)
+                    }
                     val end = Instant.now()
                     val delta = Duration.between(end, start)
                     delay((waitTime - delta).toMillis())
@@ -75,18 +83,18 @@ class MainActivity : AppCompatActivity(), Callback<GithubListWorkflows> {
         }
     }
 
-    private suspend fun runBackgroundRefresh(ghAPI: GitHubService) {
-        val repoPath = preferenceManager.getString("repository", null)
-            ?: return
+    private fun runBackgroundRefresh(ghAPI: GitHubService, token: String) {
+        val repositories = repositoryDatabase.repositoryDao().getAll()
 
-        val token = preferenceManager.getString("token", null) ?: return
-        val split = repoPath.split("/")
+        for (repoPath in repositories) {
+            val split = repoPath.split("/")
 
-        Log.d(null, "${split[0]}, ${split[1]}, $token")
+            Log.d(null, "${split[0]}, ${split[1]}, $token")
 
-        val call = ghAPI.listRepos(split[0], split[1], "token $token")
+            val call = ghAPI.listRepos(split[0], split[1], "token $token")
 
-        call.enqueue(this)
+            call.enqueue(this)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -122,7 +130,11 @@ class MainActivity : AppCompatActivity(), Callback<GithubListWorkflows> {
     ) {
         val workflows = response.body() ?: return
         Log.d(null, "workflows $workflows ${response.isSuccessful}")
-        actionsViewModel.actionData.value = workflows.workflowRuns
+        if (workflows.workflowRuns.any()) {
+        val data = actionsViewModel.actionData.value?.toMutableMap() ?: mutableMapOf()
+            data[workflows.workflowRuns.first().repository.fullName] = workflows.workflowRuns
+            actionsViewModel.actionData.value = data
+        }
     }
 
     override fun onFailure(call: Call<GithubListWorkflows>, t: Throwable) {

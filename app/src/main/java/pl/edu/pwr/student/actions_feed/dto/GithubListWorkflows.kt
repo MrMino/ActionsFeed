@@ -13,7 +13,7 @@ data class GithubListWorkflows(
 
     data class CommitInfo(
         val id: String,
-        val tree_id: String,
+        val treeId: String,
         val message: String,
         val timestamp: Timestamp,
         val author: GitPersona,
@@ -24,11 +24,16 @@ data class GithubListWorkflows(
         val id: Int,
         val name: String,
         val workflowId: Int,
-        val head_commit: CommitInfo,
-        val head_branch: String,
+        val headCommit: CommitInfo,
+        val headBranch: String,
         val status: String,
         val conclusion: String,
         val headSha: String,
         val runNumber: Int,
+        val repository: Repository,
+    )
+
+    data class Repository(
+        val fullName: String,
     )
 }

@@ -26,11 +26,11 @@ class ActionListAdapter(private val actionsList: MutableList<GithubListWorkflows
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // TODO Set different icon in the UI based on the workflow status
-        holder.commitMessage.text = actionsList[position].head_commit.message
+        holder.commitMessage.text = actionsList[position].headCommit.message
         holder.workflowName.text = actionsList[position].name
         holder.commitHash.text = actionsList[position].headSha
-        holder.committerName.text = actionsList[position].head_commit.committer.name
-        holder.branchName.text = actionsList[position].head_branch
+        holder.committerName.text = actionsList[position].headCommit.committer.name
+        holder.branchName.text = actionsList[position].headBranch
     }
 
     override fun getItemCount(): Int {
