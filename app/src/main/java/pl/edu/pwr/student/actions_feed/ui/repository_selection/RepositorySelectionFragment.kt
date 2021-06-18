@@ -36,7 +36,7 @@ class RepositorySelectionFragment : Fragment() {
                 .build()
 
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        repositoryListAdapter = RepositorySelectionListAdapter(repositoryList)
+        repositoryListAdapter = RepositorySelectionListAdapter(repositoryList, this)
         binding.recyclerView.adapter = repositoryListAdapter
 
         binding.addRepo.setOnClickListener { _ -> addRepository(binding.repositoryPath.text.toString()) }
@@ -90,8 +90,7 @@ class RepositorySelectionFragment : Fragment() {
         }
     }
 
-    //Ugly for now
-    private fun deleteRepository(repoPath: String) {
+    fun deleteRepository(repoPath: String) {
         if (repositoryList.contains(repoPath)) {
             lifecycleScope.launch(Dispatchers.IO) {
                 database.repositoryDao().deleteRepositoryByName(repoPath)
