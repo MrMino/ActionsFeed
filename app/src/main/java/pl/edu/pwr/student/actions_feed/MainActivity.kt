@@ -39,6 +39,7 @@ import java.time.Instant
 
 class MainActivity : AppCompatActivity(), Callback<GithubListWorkflows> {
     private val actionsViewModel: ActionsViewModel by viewModels()
+    private var timeCounter = 0
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var requestQueue: RequestQueue
@@ -66,13 +67,21 @@ class MainActivity : AppCompatActivity(), Callback<GithubListWorkflows> {
         repositoryDatabase = Room.databaseBuilder(applicationContext, RepositoryDatabase::class.java, "repository.db")
             .build()
 
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.label.toString() == "Actions") {
+                timeCounter -= 30
+                timeCounter -= 30
+            }
+        }
+
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 val retrofit = Retrofit.Builder().baseUrl("https://api.github.com/")
                     .addConverterFactory(GsonConverterFactory.create(gson)).build()
                 val ghAPI = retrofit.create(GitHubService::class.java)
 
-                while (true) {
+                //Old way
+                /*while (true) {
                     val start = Instant.now()
                     val token = preferenceManager.getString("token", null)
                     val waitTime = Duration.ofSeconds(preferenceManager.getString("waitTime", "15")!!.toLong())
@@ -82,6 +91,22 @@ class MainActivity : AppCompatActivity(), Callback<GithubListWorkflows> {
                     val end = Instant.now()
                     val delta = Duration.between(end, start)
                     delay((waitTime - delta).toMillis())
+                }*/
+
+                //New way
+                while (true) {
+                    delay((Duration.ofSeconds(1)).toMillis())
+                    if(timeCounter > 0) {
+                        timeCounter--
+                        continue
+                    }
+                    else {
+                        timeCounter = preferenceManager.getString("waitTime", "15")!!.toLong().toInt()
+                    }
+                    val token = preferenceManager.getString("token", null)
+                    if (token != null) {
+                        runBackgroundRefresh(ghAPI, token)
+                    }
                 }
             }
         }
