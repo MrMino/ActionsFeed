@@ -9,5 +9,11 @@ data class GithubListWorkflowJobs(
         val name: String,
         val conclusion: String,
         val html_url: String,
+        val steps: List<StepItem>
+    )
+
+    data class StepItem (
+        val name: String,
+        val conclusion: String,
     )
 }

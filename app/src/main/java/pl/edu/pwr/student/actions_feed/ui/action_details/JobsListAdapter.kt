@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat.startActivity
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 
 
 class JobsListAdapter (
@@ -26,6 +27,7 @@ class JobsListAdapter (
         val successIcon  = view.findViewById<ImageView>(R.id.jobStatusIconSuccess)
         val failureIcon = view.findViewById<ImageView>(R.id.jobStatusIconFailure)
         val logsButton = view.findViewById<Button>(R.id.logsButton)
+        val stepList = view.findViewById<RecyclerView>(R.id.stepList)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -57,6 +59,10 @@ class JobsListAdapter (
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(job.html_url))
             startActivity(context, browserIntent, null)
         }
+
+        holder.stepList.layoutManager = LinearLayoutManager(context)
+        val stepListAdapter = StepListAdapter(job.steps, context)
+        holder.stepList.adapter = stepListAdapter
 
         holder.itemView.setOnClickListener(){
         }
