@@ -57,7 +57,10 @@ class ActionListAdapter(
         }
 
         holder.itemView.setOnClickListener(){
-            navigation.navigate(R.id.action_ActionListFragment_to_ActionDetailsFragment)
+            val (user, repo) = action.repository.fullName.split('/')
+            val toDetailsFragment = ActionListFragmentDirections
+                .actionActionListFragmentToActionDetailsFragment(action.id, user, repo)
+            navigation.navigate(toDetailsFragment)
         }
     }
 

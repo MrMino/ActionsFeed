@@ -33,6 +33,14 @@
         <action
             android:id="@+id/action_ActionDetailsFragment_to_ActionListFragment"
             app:destination="@id/ActionListFragment" />
+        <argument
+            android:name="runId"
+            app:argType="integer" />
+        <argument
+            android:name="user"
+            app:argType="string" />
+        <argument android:name="repository"
+            app:argType="string" />
     </fragment>
 
     <fragment
