@@ -21,5 +21,5 @@
 
     <style name="Theme.ActionsFeed.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.ActionsFeed.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="Theme.ActionsFeed.PopupOverlay" parent="ThemeOverlay.AppCompat.Dark" />
 </resources>
