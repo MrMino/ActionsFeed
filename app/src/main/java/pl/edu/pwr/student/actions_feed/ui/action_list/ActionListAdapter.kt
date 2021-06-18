@@ -3,6 +3,7 @@ package pl.edu.pwr.student.actions_feed.ui.action_list
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import pl.edu.pwr.student.actions_feed.R
@@ -16,6 +17,8 @@ class ActionListAdapter(private val actionsList: MutableList<GithubListWorkflows
         val committerName: TextView = view.findViewById(R.id.committerNameTextView)
         val workflowName: TextView = view.findViewById(R.id.workflowNameView)
         val branchName: TextView = view.findViewById(R.id.branchNameTextView)
+        val successIcon: ImageView = view.findViewById(R.id.statusIconSuccess)
+        val failureIcon: ImageView = view.findViewById(R.id.statusIconFailure)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -25,13 +28,27 @@ class ActionListAdapter(private val actionsList: MutableList<GithubListWorkflows
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // TODO Set different icon in the UI based on the workflow status
         val action = actionsList[position]
         holder.commitMessage.text = action.headCommit.message
         holder.workflowName.text = action.name
         holder.commitHash.text = action.headSha
         holder.committerName.text = action.headCommit.committer.name
         holder.branchName.text = action.headBranch
+
+        when (action.conclusion) {
+            "success" -> {
+                holder.successIcon.visibility = ImageView.VISIBLE
+                holder.failureIcon.visibility = ImageView.INVISIBLE
+            }
+            "failure" -> {
+                holder.successIcon.visibility = ImageView.INVISIBLE
+                holder.failureIcon.visibility = ImageView.VISIBLE
+            }
+            else -> {
+                holder.successIcon.visibility = ImageView.INVISIBLE
+                holder.failureIcon.visibility = ImageView.INVISIBLE
+            }
+        }
     }
 
     override fun getItemCount(): Int {
