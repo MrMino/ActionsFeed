@@ -59,8 +59,9 @@ class RepositorySelectionFragment : Fragment() {
         if (repoPath == "") return;
         if (!repositoryList.contains(repoPath)) {
             checkExistence(repoPath)
+            
         } else {
-            showDialogWindow("Duplication", "You are already watching this repo")
+            showDialogWindow("Error", "You are already watching this repo")
         }
     }
 
