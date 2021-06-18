@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -40,8 +41,6 @@ class RepositorySelectionFragment : Fragment() {
         binding.recyclerView.adapter = repositoryListAdapter
 
         binding.addRepo.setOnClickListener { _ -> addRepository(binding.repositoryPath.text.toString()) }
-        //Ugly for now
-        binding.deleteRepo.setOnClickListener { _ -> deleteRepository(binding.repositoryPath.text.toString()) }
 
         initializeRecyclerView()
 
@@ -57,7 +56,7 @@ class RepositorySelectionFragment : Fragment() {
     }
 
     private fun addRepository(repoPath: String) {
-        //First check if is already in list
+        if (repoPath == "") return;
         if (!repositoryList.contains(repoPath)) {
             checkExistence(repoPath)
         } else {
@@ -91,13 +90,16 @@ class RepositorySelectionFragment : Fragment() {
     }
 
     fun deleteRepository(repoPath: String) {
+        if (repoPath == "") return;
         if (repositoryList.contains(repoPath)) {
             lifecycleScope.launch(Dispatchers.IO) {
                 database.repositoryDao().deleteRepositoryByName(repoPath)
             }
             repositoryListAdapter.deleteItem(repoPath)
         } else {
-            showDialogWindow("Lack of repo", "You are not watching that repo yet")
+            Toast.makeText(
+                this.context, "Error: repository already removed...", Toast.LENGTH_LONG
+            ).show()
         }
     }
 

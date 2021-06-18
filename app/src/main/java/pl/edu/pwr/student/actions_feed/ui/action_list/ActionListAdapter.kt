@@ -5,12 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import pl.edu.pwr.student.actions_feed.R
 import pl.edu.pwr.student.actions_feed.dto.GithubListWorkflows
 
-class ActionListAdapter(private val actionsList: MutableList<GithubListWorkflows.WorkflowItem>) :
+class ActionListAdapter(
+    private val actionsList: MutableList<GithubListWorkflows.WorkflowItem>,
+    private val navigation: NavController,
+):
     RecyclerView.Adapter<ActionListAdapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val commitMessage: TextView = view.findViewById(R.id.commitMessageTextView)
@@ -50,15 +53,10 @@ class ActionListAdapter(private val actionsList: MutableList<GithubListWorkflows
                 holder.failureIcon.visibility = ImageView.INVISIBLE
             }
         }
-    }
 
-    fun refreshList(newList: MutableList<GithubListWorkflows.WorkflowItem>) {
-        val diffUtilCallback = ActionDiffUtil(actionsList, newList)
-        val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
-
-        actionsList.clear()
-        actionsList.addAll(newList)
-        diffResult.dispatchUpdatesTo(this)
+        holder.itemView.setOnClickListener(){
+            navigation.navigate(R.id.action_ActionListFragment_to_ActionDetailsFragment)
+        }
     }
 
     override fun getItemCount(): Int {

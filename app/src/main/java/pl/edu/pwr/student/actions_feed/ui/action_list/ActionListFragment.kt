@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import pl.edu.pwr.student.actions_feed.ActionsViewModel
 import pl.edu.pwr.student.actions_feed.databinding.FragmentActionListBinding
@@ -24,7 +25,7 @@ class ActionListFragment : Fragment() {
         binding = FragmentActionListBinding.inflate(inflater, container, false)
 
         binding.actionsList.layoutManager = LinearLayoutManager(context)
-        actionListAdapter = ActionListAdapter(actionsList)
+        actionListAdapter = ActionListAdapter(actionsList, findNavController())
         binding.actionsList.adapter = actionListAdapter
 
         actionsViewModel.actionData.observe(viewLifecycleOwner, {

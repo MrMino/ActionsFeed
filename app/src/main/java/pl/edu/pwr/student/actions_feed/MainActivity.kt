@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(), Callback<GithubListWorkflows> {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -90,12 +90,8 @@ class MainActivity : AppCompatActivity(), Callback<GithubListWorkflows> {
         val repositories = repositoryDatabase.repositoryDao().getAll()
 
         for (repoPath in repositories) {
-            val split = repoPath.split("/")
-
-            Log.d(null, "${split[0]}, ${split[1]}, $token")
-
-            val call = ghAPI.listRepos(split[0], split[1], "token $token")
-
+            val (org, repo) = repoPath.split("/")
+            val call = ghAPI.listRepos(org, repo, "token $token")
             call.enqueue(this)
         }
     }
