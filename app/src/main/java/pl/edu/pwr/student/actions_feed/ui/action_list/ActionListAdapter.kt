@@ -6,9 +6,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.NavController
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import pl.edu.pwr.student.actions_feed.R
 import pl.edu.pwr.student.actions_feed.dto.GithubListWorkflows
+import pl.edu.pwr.student.actions_feed.ui.repository_selection.RepositoryDiffUtil
 
 class ActionListAdapter(
     private val actionsList: MutableList<GithubListWorkflows.WorkflowItem>,
@@ -57,6 +59,15 @@ class ActionListAdapter(
         holder.itemView.setOnClickListener(){
             navigation.navigate(R.id.action_ActionListFragment_to_ActionDetailsFragment)
         }
+    }
+
+    fun refreshList(data: MutableList<GithubListWorkflows.WorkflowItem>) {
+        val diffUtilCallback = ActionDiffUtil(actionsList, data)
+        val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
+
+        actionsList.clear()
+        actionsList.addAll(data)
+        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun getItemCount(): Int {
