@@ -59,7 +59,8 @@ class RepositorySelectionFragment : Fragment() {
         if (repoPath == "") return;
         if (!repositoryList.contains(repoPath)) {
             checkExistence(repoPath)
-            
+            binding.repositoryPath.text.clear()
+            binding.repositoryPath.clearFocus()
         } else {
             showDialogWindow("Error", "You are already watching this repo")
         }
