@@ -51,7 +51,6 @@ class RepositorySelectionFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             repositoryList.clear()
             repositoryList.addAll(database.repositoryDao().getAll())
-            repositoryListAdapter.notifyDataSetChanged()
         }
     }
 
