@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity(), Callback<GithubListWorkflows> {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
