@@ -23,7 +23,7 @@ class ActionDetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentActionDetailsBinding.inflate(inflater, container, false)
         return binding.root
