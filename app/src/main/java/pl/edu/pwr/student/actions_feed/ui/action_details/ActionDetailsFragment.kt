@@ -82,8 +82,7 @@ class ActionDetailsFragment : Fragment(), Callback<GithubListWorkflowJobs>{
         response: Response<GithubListWorkflowJobs>
     ) {
         val jobs = response.body()
-        Log.d("JOBS_API", "${jobs!!.totalCount}")
-        jobsList.addAll(jobs.jobs)
+        jobsList.addAll(jobs!!.jobs)
         binding.progressBar.visibility = ProgressBar.GONE
         jobsListAdapter.notifyDataSetChanged()
         binding.jobsList.visibility = RecyclerView.VISIBLE
