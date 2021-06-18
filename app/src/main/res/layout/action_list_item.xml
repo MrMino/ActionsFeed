@@ -68,8 +68,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/branchNameTextView"
-        app:layout_constraintStart_toStartOf="@+id/branchNameTextView"
+        android:layout_marginEnd="20dp"
+        android:tint="#4CAF50"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_check_circle_24" />
 
