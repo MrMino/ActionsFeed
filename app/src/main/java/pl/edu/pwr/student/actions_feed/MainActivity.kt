@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -89,10 +90,15 @@ class MainActivity : AppCompatActivity(), Callback<GithubListWorkflows> {
     private fun runBackgroundRefresh(ghAPI: GitHubService, token: String) {
         val repositories = repositoryDatabase.repositoryDao().getAll()
 
+        var counter = 0
         for (repoPath in repositories) {
             val (org, repo) = repoPath.split("/")
             val call = ghAPI.listRepos(org, repo, "token $token")
             call.enqueue(this)
+            counter++
+        }
+        if(counter == 0) {
+            noRepo()
         }
     }
 
@@ -127,13 +133,19 @@ class MainActivity : AppCompatActivity(), Callback<GithubListWorkflows> {
         call: Call<GithubListWorkflows>,
         response: Response<GithubListWorkflows>
     ) {
+
         val workflows = response.body() ?: return
         Log.d(null, "workflows $workflows ${response.isSuccessful}")
         if (workflows.workflowRuns.any()) {
-        val data = actionsViewModel.actionData.value?.toMutableMap() ?: mutableMapOf()
+            val data = actionsViewModel.actionData.value?.toMutableMap() ?: mutableMapOf()
             data[workflows.workflowRuns.first().repository.fullName] = workflows.workflowRuns
             actionsViewModel.actionData.value = data
         }
+    }
+
+    private fun noRepo() {
+        val data = emptyMap<String, List<GithubListWorkflows.WorkflowItem>>()
+        actionsViewModel.actionData.postValue(data)
     }
 
     override fun onFailure(call: Call<GithubListWorkflows>, t: Throwable) {

@@ -1,6 +1,7 @@
 package pl.edu.pwr.student.actions_feed.ui.action_list
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +31,8 @@ class ActionListFragment : Fragment() {
 
         actionsViewModel.actionData.observe(viewLifecycleOwner, {
     //        actionsList.clear()
-            var data: MutableList<GithubListWorkflows.WorkflowItem> = mutableListOf()
+            Log.i("tester", "observed")
+            val data: MutableList<GithubListWorkflows.WorkflowItem> = mutableListOf()
             for (item in it.values) {
                 data.addAll(
                     item.sortedBy { workflowItem -> workflowItem.status }
@@ -42,6 +44,10 @@ class ActionListFragment : Fragment() {
             actionListAdapter.refreshList(data)
             actionListAdapter.notifyDataSetChanged()
         })
+
+        fun testActionList() {
+
+        }
 
         return binding.root
     }
