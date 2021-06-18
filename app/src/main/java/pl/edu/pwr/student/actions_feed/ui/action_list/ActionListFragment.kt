@@ -31,9 +31,7 @@ class ActionListFragment : Fragment() {
             actionsList.clear()
             for (item in it.values) {
                 actionsList.addAll(
-                    item.groupBy { workflowItem -> workflowItem.workflowId }
-                        .values.map { vec -> vec.maxByOrNull { item -> item.runNumber }!! }
-                        .sortedBy { workflowItem -> workflowItem.status }
+                    item.sortedBy { workflowItem -> workflowItem.status }
                 )
             }
             actionListAdapter.notifyDataSetChanged()
