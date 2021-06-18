@@ -78,7 +78,7 @@ class RepositorySelectionFragment : Fragment() {
         }
         job.join()
         if (flag) acceptRepository(repoPath)
-        else showDialogWindow("Lack of Existence", "That repo does not exist")
+        else showDialogWindow("Error", "Repository is hidden or does not exist")
     }
 
     private fun acceptRepository(repoPath: String) {
