@@ -41,7 +41,6 @@ class RepositorySelectionFragment : Fragment() {
         binding.recyclerView.adapter = repositoryListAdapter
 
         binding.addRepo.setOnClickListener { _ -> addRepository(binding.repositoryPath.text.toString()) }
-        binding.deleteRepo.setOnClickListener { _ -> deleteRepository(binding.repositoryPath.text.toString()) }
 
         initializeRecyclerView()
 
