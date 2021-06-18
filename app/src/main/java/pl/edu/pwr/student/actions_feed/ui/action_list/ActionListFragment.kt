@@ -28,12 +28,17 @@ class ActionListFragment : Fragment() {
         binding.actionsList.adapter = actionListAdapter
 
         actionsViewModel.actionData.observe(viewLifecycleOwner, {
-            actionsList.clear()
+    //        actionsList.clear()
+            var data: MutableList<GithubListWorkflows.WorkflowItem> = mutableListOf()
             for (item in it.values) {
-                actionsList.addAll(
+                data.addAll(
                     item.sortedBy { workflowItem -> workflowItem.status }
                 )
+    /*            actionsList.addAll(
+                    item.sortedBy { workflowItem -> workflowItem.status }
+                )*/
             }
+            actionListAdapter.refreshList(data)
             actionListAdapter.notifyDataSetChanged()
         })
 

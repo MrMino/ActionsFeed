@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import pl.edu.pwr.student.actions_feed.R
 import pl.edu.pwr.student.actions_feed.dto.GithubListWorkflows
@@ -49,6 +50,15 @@ class ActionListAdapter(private val actionsList: MutableList<GithubListWorkflows
                 holder.failureIcon.visibility = ImageView.INVISIBLE
             }
         }
+    }
+
+    fun refreshList(newList: MutableList<GithubListWorkflows.WorkflowItem>) {
+        val diffUtilCallback = ActionDiffUtil(actionsList, newList)
+        val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
+
+        actionsList.clear()
+        actionsList.addAll(newList)
+        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun getItemCount(): Int {
