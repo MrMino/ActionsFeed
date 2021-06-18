@@ -28,7 +28,7 @@ class RepositorySelectionFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentRepositorySelectionBinding.inflate(layoutInflater, container, false)
 
         database =
